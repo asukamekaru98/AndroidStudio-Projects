@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var scanBtn: MaterialButton
     private lateinit var resultTv: TextView
 
-    companion object{
+    companion object {
         private const val CAMERA_REQUEST_CODE = 100
         private const val STORAGE_REQUEST_CODE = 101
 
@@ -61,7 +61,13 @@ class MainActivity : AppCompatActivity() {
         scanBtn = findViewById(R.id.scanBtn)
         resultTv = findViewById(R.id.resultTv)
 
-        cameraPermission = arrayOf(android.Manifest.permission.CAMERA, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        //カメラ権限の設定値
+        cameraPermission = arrayOf(
+            android.Manifest.permission.CAMERA,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+
+        //ストレージ権限の設定値
         storagePermission = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
 
         barcodeScannerOptions = BarcodeScannerOptions.Builder()
@@ -71,59 +77,64 @@ class MainActivity : AppCompatActivity() {
         barcodeScanner = BarcodeScanning.getClient(barcodeScannerOptions!!)
 
         //カメラボタン押下
-        cameraBtn.setOnClickListener(){
+        cameraBtn.setOnClickListener() {
 
-
-            if(checkCameraPermissions()){
+            //カメラ権限の確認
+            if (checkCameraPermissions()) {
+                //
                 pickImageCamera()
-            }else{
+            } else {
+                //カメラ権限のリクエスト
                 requestCameraPermission()
             }
 
         }
 
         //ギャラリーボタン押下
-        galleryBtn.setOnClickListener(){
+        galleryBtn.setOnClickListener() {
 
-            if(checkStoragePermission()){
+            //ギャラリー権限の確認
+            if (checkStoragePermission()) {
+                //
                 pickImageGallery()
-            }else{
+            } else {
+                //ギャラリー権限のリクエスト
                 requestStoragePermission()
             }
 
         }
 
         //スキャンボタン押下
-        scanBtn.setOnClickListener(){
-            if(imageUri == null){
+        scanBtn.setOnClickListener() {
+            if (imageUri == null) {
                 showToast("Pick image first")
-            }else{
+            } else {
                 detectResultFormImage()
             }
         }
     }
 
-    private fun detectResultFormImage(){
-        Log.d(TAG,"detectResultFromImage: ")
-        try{
-            val inputImage = InputImage.fromFilePath(this,imageUri!!)
+    private fun detectResultFormImage() {
+        Log.d(TAG, "detectResultFromImage: ")
+        try {
+            val inputImage = InputImage.fromFilePath(this, imageUri!!)
 
             val barcodeResult = barcodeScanner!!.process(inputImage)
-                .addOnSuccessListener {barcodes->
-                extractBarcodeQrCodeInfo(barcodes)
-            }
-                .addOnFailureListener{e->
-                    Log.e(TAG,"detectResultFromImage: ",e)
+                .addOnSuccessListener { barcodes ->
+                    extractBarcodeQrCodeInfo(barcodes)
+                }
+                .addOnFailureListener { e ->
+                    Log.e(TAG, "detectResultFromImage: ", e)
                     showToast("Failed scanning due to ${e.message}")
                 }
-        }catch(e:Exception){
-            Log.e(TAG,"detectResultFromImage: ",e)
+        } catch (e: Exception) {
+            Log.e(TAG, "detectResultFromImage: ", e)
             showToast("Failed due to ${e.message}")
         }
     }
 
-    private fun extractBarcodeQrCodeInfo(barcodes:List<Barcode>){
-        for(barcode in barcodes){
+    private fun extractBarcodeQrCodeInfo(barcodes: List<Barcode>) {
+        for (barcode in barcodes) {
             val bound = barcode.boundingBox
             val corners = barcode.cornerPoints
 
@@ -131,21 +142,19 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "extractBarcodeQrCodeInfo: rawValue: $rawValue ")
 
             val valueType = barcode.valueType
-            when(valueType){
-                Barcode.TYPE_WIFI ->{
+            when (valueType) {
+                Barcode.TYPE_WIFI -> {
                     val typeWifi = barcode.wifi
 
                     val ssid = "${typeWifi?.ssid}"
                     val password = "${typeWifi?.password}"
                     var encryptionType = "${typeWifi?.encryptionType}"
 
-                    if(encryptionType == "1"){
+                    if (encryptionType == "1") {
                         encryptionType = "OPEN"
-                    }
-                    else if(encryptionType == "2"){
+                    } else if (encryptionType == "2") {
                         encryptionType = "WPA"
-                    }
-                    else if(encryptionType == "3"){
+                    } else if (encryptionType == "3") {
                         encryptionType = "WEP"
                     }
 
@@ -154,9 +163,11 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "extractBarcodeQrCodeInfo: password: $password")
                     Log.d(TAG, "extractBarcodeQrCodeInfo: encryptionType: $encryptionType")
 
-                    resultTv.text = "TYPE_WIFI \n ssid: $ssid : \n password:$password \n encryptionType: $encryptionType \n\n rawValue: $rawValue"
+                    resultTv.text =
+                        "TYPE_WIFI \n ssid: $ssid : \n password:$password \n encryptionType: $encryptionType \n\n rawValue: $rawValue"
                 }
-                Barcode.TYPE_URL ->{
+
+                Barcode.TYPE_URL -> {
                     val typeUrl = barcode.url
                     val title = "${typeUrl?.title}"
                     val url = "${typeUrl?.url}"
@@ -165,9 +176,11 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "extractBarcodeQrCodeInfo: title: $title")
                     Log.d(TAG, "extractBarcodeQrCodeInfo: url: $url")
 
-                    resultTv.text = "TYPE_URL \n title: $title \n url: $url \n\n rawValue: $rawValue"
+                    resultTv.text =
+                        "TYPE_URL \n title: $title \n url: $url \n\n rawValue: $rawValue"
                 }
-                Barcode.TYPE_EMAIL ->{
+
+                Barcode.TYPE_EMAIL -> {
                     val typeEmail = barcode.email
 
                     val address = "${typeEmail?.address}"
@@ -180,9 +193,11 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "extractBarcodeQrCodeInfo: subject: $subject")
 
                     //resultTv.text = ""
-                    resultTv.text = "TYPE_EMAIL \n address: $address \n body: $body \n subject: $subject  \n\n rawValue: $rawValue"
+                    resultTv.text =
+                        "TYPE_EMAIL \n address: $address \n body: $body \n subject: $subject  \n\n rawValue: $rawValue"
                 }
-                Barcode.TYPE_CONTACT_INFO->{
+
+                Barcode.TYPE_CONTACT_INFO -> {
                     val typeContact = barcode.contactInfo
 
                     val title = "${typeContact?.title}"
@@ -196,9 +211,11 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG, "extractBarcodeQrCodeInfo: name: $name")
                     Log.d(TAG, "extractBarcodeQrCodeInfo: phone: $phone")
 
-                    resultTv.text = "TYPE_CONTACT_INFO \n title: $title \n organization: $organization \n name: $name \n phone: $phone \n\n rawValue: $rawValue"
+                    resultTv.text =
+                        "TYPE_CONTACT_INFO \n title: $title \n organization: $organization \n name: $name \n phone: $phone \n\n rawValue: $rawValue"
                 }
-                else ->{
+
+                else -> {
                     resultTv.text = "rawValue: $rawValue"
                 }
             }
@@ -206,7 +223,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun pickImageGallery(){
+    private fun pickImageGallery() {
         val intent = Intent(Intent.ACTION_PICK)
 
         intent.type = "image/*"
@@ -215,40 +232,41 @@ class MainActivity : AppCompatActivity() {
 
     private val galleryActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ){result->
-        if(result.resultCode == Activity.RESULT_OK){
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
 
             imageUri = data?.data
-            Log.d(TAG,"galleryActivityResultLauncher:imageUri: $imageUri")
+            Log.d(TAG, "galleryActivityResultLauncher:imageUri: $imageUri")
 
             imageIv.setImageURI(imageUri)
-        }else{
+        } else {
             showToast("Cancelled.....!!!!!!!!!!!!")
         }
 
     }
 
-    private fun pickImageCamera(){
+    private fun pickImageCamera() {
         val contentValues = ContentValues()
-        contentValues.put(MediaStore.Images.Media.TITLE,"Sample Image")
-        contentValues.put(MediaStore.Images.Media.DESCRIPTION,"Sample Image Description")
+        contentValues.put(MediaStore.Images.Media.TITLE, "Sample Image")
+        contentValues.put(MediaStore.Images.Media.DESCRIPTION, "Sample Image Description")
 
-        imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,contentValues)
+        imageUri =
+            contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
 
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri)
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         cameraActivityResultLauncher.launch(intent)
     }
 
     private val cameraActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ){result->
+    ) { result ->
 
-        if(result.resultCode == Activity.RESULT_OK){
+        if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
 
-            Log.d(TAG,"cameraActivityResultLauncher: imageUri: $imageUri")
+            Log.d(TAG, "cameraActivityResultLauncher: imageUri: $imageUri")
 
             imageIv.setImageURI(imageUri)
         }
@@ -256,28 +274,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     //ストレージ権限の確認
-    private fun checkStoragePermission():Boolean{
-        val result = (ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+    private fun checkStoragePermission(): Boolean {
+        val result = (ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED)
+
+        Log.e(TAG, "result: $result")
+
         return result
     }
 
-    private fun requestStoragePermission(){
-        ActivityCompat.requestPermissions(this,storagePermission, STORAGE_REQUEST_CODE)
+    private fun requestStoragePermission() {
+        ActivityCompat.requestPermissions(this, storagePermission, STORAGE_REQUEST_CODE)
     }
 
     //カメラ権限の確認
-    private fun checkCameraPermissions():Boolean{
-        val resultCamera = (ContextCompat.checkSelfPermission(this,android.Manifest.permission.CAMERA)==PackageManager.PERMISSION_GRANTED)
-        val resultStorage = (ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED)
+    private fun checkCameraPermissions(): Boolean {
+        val resultCamera = (ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED)
+        val resultStorage = (ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED)
 
         return resultCamera && resultStorage
 
     }
 
-    private fun requestCameraPermission(){
-        ActivityCompat.requestPermissions(this,cameraPermission,CAMERA_REQUEST_CODE)
+    private fun requestCameraPermission() {
+        ActivityCompat.requestPermissions(this, cameraPermission, CAMERA_REQUEST_CODE)
     }
 
+    //
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -285,27 +316,33 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        when(requestCode){
+        Log.d(TAG, "requestCode: $requestCode")
+
+        when (requestCode) {
             CAMERA_REQUEST_CODE -> {
-                if(grantResults.isNotEmpty()){
+                if (grantResults.isNotEmpty()) {
                     val cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
                     val storageAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED
 
-                    if(cameraAccepted && storageAccepted){
+                    Log.d(TAG, "cameraAccepted: $cameraAccepted")
+                    Log.d(TAG, "storageAccepted: $storageAccepted")
+
+                    if (cameraAccepted/* && storageAccepted*/) {
                         pickImageCamera()
-                    }else{
+                    } else {
                         showToast("Camera & Storage permissions are required")
                     }
                 }
             }
+
             STORAGE_REQUEST_CODE -> {
 
-                if(grantResults.isNotEmpty()){
+                if (grantResults.isNotEmpty()) {
                     val storageAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
 
-                    if(storageAccepted){
+                    if (storageAccepted) {
                         pickImageGallery()
-                    }else{
+                    } else {
                         showToast("Storage permission is required...")
                     }
                 }
@@ -314,7 +351,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //トースト表示
-    private fun showToast(message: String){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
