@@ -20,81 +20,50 @@ import com.websarva.wings.android.barcodereader.databinding.ActivityMainBinding
 
 class MainActivity : ComponentActivity() {
 
-    private val requestPremissionLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-            if (isGranted) {
-                showCamera()
-            } else {
-
-            }
-        }
-
-
     private lateinit var binding: ActivityMainBinding
-
-    private val scanLauncher =
-        registerForActivityResult(ScanContract()) { result: ScanIntentResult ->
-            run{
-                if (result.contents == null) {
-                    Toast.makeText(this,"Cancelled",Toast.LENGTH_SHORT).show()
-                } else {
-                    setResult(result.contents)
-                }
-            }
-        }
-
-
+    private lateinit var qrReaderHandler: QRReaderHandler // カメラ処理用のクラス
 
     private fun setResult(string: String){
+        //スキャンされたQRコードを結果のテキストに設定
         binding.textResult.text = string
     }
 
-    private fun showCamera() {
-        val options = ScanOptions()
-        options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
-        options.setPrompt("Scan QR Code")
-        options.setCameraId(0)
-        options.setBeepEnabled(false)
-        options.setBarcodeImageEnabled(true)
-        options.setOrientationLocked(false)
-
-        scanLauncher.launch(options)
-    }
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
+
+        //QRコードリーダー
         initBinding()
+        initqrReaderHandlerHandler()
         initViews()
-        //setContentView(R.layout.activity_main)
-
     }
 
-    private fun initViews() {
-        binding.fab.setOnClickListener {
-            checkPremissionCamrea(this)
-        }
-    }
 
-    private fun checkPremissionCamrea(context: Context) {
-        if (ContextCompat.checkSelfPermission(
-                context,
-                android.Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            showCamera()
-        } else if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
-            Toast.makeText(context, "CAMERA premission required", Toast.LENGTH_SHORT).show()
-        } else {
-            requestPremissionLauncher.launch(android.Manifest.permission.CAMERA)
-        }
-    }
+
+    //QRコードリーダー
 
     private fun initBinding() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
 
+    private fun initqrReaderHandlerHandler() {
+        qrReaderHandler = QRReaderHandler(this) { result ->
+            // スキャン結果を処理するコールバック
+            if (result == null) {
+                Toast.makeText(this, "キャンセルされました", Toast.LENGTH_SHORT).show()
+            } else {
+                binding.textResult.text = result
+            }
+        }
+    }
+
+    private fun initViews() {
+        //FABにクリックリスナーを設定してカメラパーミッションを確認
+        binding.fab.setOnClickListener {
+            qrReaderHandler.checkPermissionQRReader(this)
+        }
+    }
 
 }
