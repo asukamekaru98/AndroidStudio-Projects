@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
             //カメラ権限の確認
             if (checkCameraPermissions()) {
-                //
+                //カメラ起動
                 pickImageCamera()
             } else {
                 //カメラ権限のリクエスト
@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         //スキャンボタン押下
         scanBtn.setOnClickListener() {
             if (imageUri == null) {
-                showToast("Pick image first")
+                showToast_shortTime("Pick image first")
             } else {
                 detectResultFormImage()
             }
@@ -125,11 +125,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 .addOnFailureListener { e ->
                     Log.e(TAG, "detectResultFromImage: ", e)
-                    showToast("Failed scanning due to ${e.message}")
+                    showToast_shortTime("Failed scanning due to ${e.message}")
                 }
         } catch (e: Exception) {
             Log.e(TAG, "detectResultFromImage: ", e)
-            showToast("Failed due to ${e.message}")
+            showToast_shortTime("Failed due to ${e.message}")
         }
     }
 
@@ -241,11 +241,12 @@ class MainActivity : AppCompatActivity() {
 
             imageIv.setImageURI(imageUri)
         } else {
-            showToast("Cancelled.....!!!!!!!!!!!!")
+            showToast_shortTime("Cancelled.....!!!!!!!!!!!!")
         }
 
     }
 
+    /*  カメラ起動   */
     private fun pickImageCamera() {
         val contentValues = ContentValues()
         contentValues.put(MediaStore.Images.Media.TITLE, "Sample Image")
@@ -258,6 +259,7 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         cameraActivityResultLauncher.launch(intent)
     }
+
 
     private val cameraActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -330,7 +332,7 @@ class MainActivity : AppCompatActivity() {
                     if (cameraAccepted/* && storageAccepted*/) {
                         pickImageCamera()
                     } else {
-                        showToast("Camera & Storage permissions are required")
+                        showToast_shortTime("Camera & Storage permissions are required")
                     }
                 }
             }
@@ -343,15 +345,20 @@ class MainActivity : AppCompatActivity() {
                     if (storageAccepted) {
                         pickImageGallery()
                     } else {
-                        showToast("Storage permission is required...")
+                        showToast_shortTime("Storage permission is required...")
                     }
                 }
             }
         }
     }
 
-    //トースト表示
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    /*  トースト表示_ショートタイム    */
+    private fun showToast_shortTime(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    /*  トースト表示_ロングタイム    */
+    private fun showToast_longTime(msg: String) {
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
     }
 }
