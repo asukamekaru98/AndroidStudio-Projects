@@ -5,5 +5,10 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <!-- Splash screen theme. -->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+
+    </style>
+
     <style name="Theme.BarcodeReader" parent="Base.Theme.BarcodeReader" />
 </resources>

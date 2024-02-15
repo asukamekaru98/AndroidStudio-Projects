@@ -60,4 +60,6 @@ dependencies {
     implementation ("com.google.zxing:core:3.4.1")                  //ライブラリダウンロード
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")  //ライブラリダウンロード
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4") //スプラッシュ（マウンテン）
+
 }
