@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021 大前良介 (OHMAE Ryosuke)
+ *
+ * This software is released under the MIT License.
+ * http://opensource.org/licenses/MIT
+ */
+
 package com.websarva.wings.android.qrandbarcodereader.constant
 
 import com.google.mlkit.vision.barcode.common.Barcode

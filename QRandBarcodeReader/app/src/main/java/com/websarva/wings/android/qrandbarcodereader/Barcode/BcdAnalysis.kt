@@ -1,6 +1,13 @@
+/*
+ * Copyright (c) 2021 大前良介 (OHMAE Ryosuke)
+ *
+ * This software is released under the MIT License.
+ * http://opensource.org/licenses/MIT
+ */
+
 /* クラス : バーコード解析 */
 
-package com.websarva.wings.android.qrandbarcodereader
+package com.websarva.wings.android.qrandbarcodereader.Barcode
 
 import android.annotation.SuppressLint
 import androidx.camera.core.ImageAnalysis

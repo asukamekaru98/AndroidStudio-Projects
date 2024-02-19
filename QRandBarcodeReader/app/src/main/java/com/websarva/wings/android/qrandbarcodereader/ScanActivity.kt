@@ -1,52 +1,61 @@
+/*
+ * Copyright (c) 2021 大前良介 (OHMAE Ryosuke)
+ *
+ * This software is released under the MIT License.
+ * http://opensource.org/licenses/MIT
+ */
+
 package com.websarva.wings.android.qrandbarcodereader
 
+//import com.websarva.wings.android.qrandbarcodereader.util.Launcher
 import android.animation.ValueAnimator
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
-import android.view.Menu
+import android.os.Vibrator
 import android.view.MenuItem
-import android.view.View
-import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.camera.core.ImageProxy
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import com.google.mlkit.vision.barcode.common.Barcode
-
-import com.websarva.wings.android.qrandbarcodereader.bcdscanner.BcdScanner
-import com.websarva.wings.android.qrandbarcodereader.databinding.ActivityMainBinding
-
+import com.websarva.wings.android.qrandbarcodereader.Barcode.BcdScanner
 import com.websarva.wings.android.qrandbarcodereader.constant.formatStr
 import com.websarva.wings.android.qrandbarcodereader.constant.typeStr
+import com.websarva.wings.android.qrandbarcodereader.databinding.ActivityScanBinding
 import com.websarva.wings.android.qrandbarcodereader.permission.CameraPermission
 import com.websarva.wings.android.qrandbarcodereader.permission.DialogPermission
 import com.websarva.wings.android.qrandbarcodereader.permission.registerForCameraPermissionRequest
 import com.websarva.wings.android.qrandbarcodereader.result.ScanResult
 import com.websarva.wings.android.qrandbarcodereader.result.ScanResultAdapter
-import com.websarva.wings.android.qrandbarcodereader.result.ScanResultDialog
 import com.websarva.wings.android.qrandbarcodereader.setting.Settings
-import com.websarva.wings.android.qrandbarcodereader.util.Launcher
 import com.websarva.wings.android.qrandbarcodereader.util.ReviewRequester
-import com.websarva.wings.android.qrandbarcodereader.util.Updater
-import com.websarva.wings.android.qrandbarcodereader.util.observe
 
 class ScanActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding   //バインド
+    private lateinit var binding: ActivityScanBinding   //バインド
     private lateinit var bcdScanner: BcdScanner         //バーコードスキャナ
     private var started: Boolean = false
     private val launcher = registerForCameraPermissionRequest { granted, succeedToShowDialog ->
         if (granted) {
             startCamera()
         } else if (!succeedToShowDialog) {
-            PermissionDialog.show(this, CAMERA_PERMISSION_REQUEST_KEY)
+            DialogPermission.show(this, CAMERA_PERMISSION_REQUEST_KEY)
         } else {
             finishByError()
         }
     }
 
-
+    private lateinit var adapter: ScanResultAdapter
+    private lateinit var vibrator: Vibrator
+    private lateinit var detectedPresenter: DetectedPresenter
+    private val viewModel: MainActivityViewModel by viewModels()
+    private val settings: Settings by lazy {
+        Settings.get()
+    }
+    private var resultSet: Set<ScanResult> = emptySet()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,15 +66,6 @@ class ScanActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)                        //アクションバーにツールバーをセット
         supportActionBar?.setDisplayHomeAsUpEnabled(true)   //ツールバーに戻るボタンを設置
-
-
-        val returnButton = findViewById<Button>(R.id.return_button)
-
-
-
-
-        //戻るボタン
-        returnButton.setOnClickListener { _: View? -> finish() }//returnボタンでおしまい
     }
 
 
@@ -79,6 +79,20 @@ class ScanActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+/*
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.license -> LicenseActivity.start(this)
+            R.id.source_code -> Launcher.openSourceCode(this)
+            R.id.privacy_policy -> Launcher.openPrivacyPolicy(this)
+            R.id.share_this_app -> Launcher.shareThisApp(this)
+            R.id.play_store -> Launcher.openGooglePlay(this)
+            R.id.settings -> SettingsActivity.start(this)
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
+    }
+ */
     override fun onRestart() {
         super.onRestart()
         if (!started) {
@@ -106,6 +120,7 @@ class ScanActivity : AppCompatActivity() {
         Toast.makeText(this, R.string.toast_permission_required, Toast.LENGTH_LONG).show()
     }
 
+/*
     private fun onFlashOn(on: Boolean) {
         val icon = if (on) {
             R.drawable.ic_flash_on
@@ -115,10 +130,12 @@ class ScanActivity : AppCompatActivity() {
         binding.flash.setImageResource(icon)
     }
 
+ */
+
     private fun startCamera() {
         if (started) return
         started = true
-        codeScanner.start()
+        bcdScanner.start()
     }
 
     private fun onDetectCode(imageProxy: ImageProxy, codes: List<Barcode>) {
@@ -164,23 +181,13 @@ class ScanActivity : AppCompatActivity() {
         }
     }
 
+    /*
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.license -> LicenseActivity.start(this)
-            R.id.source_code -> Launcher.openSourceCode(this)
-            R.id.privacy_policy -> Launcher.openPrivacyPolicy(this)
-            R.id.share_this_app -> Launcher.shareThisApp(this)
-            R.id.play_store -> Launcher.openGooglePlay(this)
-            R.id.settings -> SettingsActivity.start(this)
-            else -> return super.onOptionsItemSelected(item)
-        }
-        return true
-    }
+     */
 
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_KEY = "CAMERA_PERMISSION_REQUEST_KEY"

@@ -1,4 +1,4 @@
-package com.websarva.wings.android.qrandbarcodereader.bcdscanner
+package com.websarva.wings.android.qrandbarcodereader.Barcode
 
 import androidx.activity.ComponentActivity
 import androidx.core.content.ContextCompat
@@ -32,8 +32,6 @@ import androidx.camera.view.PreviewView
 import timber.log.Timber
 
 //クラス
-import com.websarva.wings.android.qrandbarcodereader.BcdAnalysis
-
 
 
 class BcdScanner(
