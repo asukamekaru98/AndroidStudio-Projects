@@ -2,31 +2,25 @@ package com.websarva.wings.android.qrandbarcodereader
 
 import android.app.Activity
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.MediaStore.Images.Media
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import com.google.android.material.button.MaterialButton
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
-import java.lang.Exception
-import kotlin.jvm.internal.Ref.BooleanRef
 
 class MainActivity : AppCompatActivity() {
 
@@ -78,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         //カメラボタン押下
         cameraBtn.setOnClickListener() {
-
+/*
             //カメラ権限の確認
             if (checkCameraPermissions()) {
                 //カメラ起動
@@ -87,6 +81,13 @@ class MainActivity : AppCompatActivity() {
                 //カメラ権限のリクエスト
                 requestCameraPermission()
             }
+ */
+            //ScanActivityに遷移
+            val intent = Intent(
+                application,
+                ScanActivity::class.java
+            )
+            startActivity(intent)
 
         }
 
