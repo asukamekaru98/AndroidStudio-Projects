@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -68,6 +69,20 @@ class ScanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
+
+        Thread(Runnable {
+
+            //テストアプリなので3秒sleepしていますが、本来はここで実行したいバックグラウンド動作を実装してください。
+            try {
+                Thread.sleep(3000)
+            } catch (e: InterruptedException) {
+                return@Runnable
+            }
+            runOnUiThread {
+                findViewById<View>(R.id.LL_Load).visibility = View.GONE
+                findViewById<View>(R.id.LL_Main).visibility = View.VISIBLE
+            }
+        }).start()
 
         binding = ActivityScanBinding.inflate(layoutInflater)
         setContentView(binding.root)

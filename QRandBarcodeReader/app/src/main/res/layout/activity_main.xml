@@ -11,63 +11,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Barcode &amp; QR Code Scanner"
-            android:textAlignment="center"
-            style="@style/TextAppearance.MaterialComponents.Headline6"/>
-        
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/cameraBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="CAMERA"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/galleryBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="GALLERY"
-                android:layout_marginStart="5dp"/>
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/imageIv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_android_black_24dp" />
-
+        <!-- Btn：Bluetoothアドレス" -->
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/scanBtn"
+            android:id="@+id/btnBluetoothAdrScan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/btn_act_scan_bt_address"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"/>
+
+        <!-- TxVi：Bluetoothアドレス -->
+        <TextView
+            android:id="@+id/tv_BluetoothAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/txt_bluetoothAddress"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- EdTe：Bluetoothアドレス" -->
+        <EditText
+            android:id="@+id/etBluetoothAddress"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:inputType="text|textPostalAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_BluetoothAddress" />
+
+        <!-- Btn：バーコードスキャン -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBcdScan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="SCAN"/>
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:text="@string/btn_act_scan_bcd" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:text="Result:"
-            style="@style/TextAppearance.MaterialComponents.Body1"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/resultTv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        
     </LinearLayout>
+
+
 
 </ScrollView>
