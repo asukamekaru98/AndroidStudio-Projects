@@ -17,10 +17,12 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.camera.core.ImageProxy
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.getSystemService
+import androidx.core.view.isGone
 import androidx.core.view.updateLayoutParams
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.websarva.wings.android.qrandbarcodereader.Barcode.BcdScanner
 import com.websarva.wings.android.qrandbarcodereader.constant.formatStr
@@ -31,8 +33,11 @@ import com.websarva.wings.android.qrandbarcodereader.permission.DialogPermission
 import com.websarva.wings.android.qrandbarcodereader.permission.registerForCameraPermissionRequest
 import com.websarva.wings.android.qrandbarcodereader.result.ScanResult
 import com.websarva.wings.android.qrandbarcodereader.result.ScanResultAdapter
+import com.websarva.wings.android.qrandbarcodereader.result.ScanResultDialog
 import com.websarva.wings.android.qrandbarcodereader.setting.Settings
 import com.websarva.wings.android.qrandbarcodereader.util.ReviewRequester
+import com.websarva.wings.android.qrandbarcodereader.util.Updater
+import com.websarva.wings.android.qrandbarcodereader.util.observe
 
 class ScanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScanBinding   //バインド
@@ -52,9 +57,11 @@ class ScanActivity : AppCompatActivity() {
     private lateinit var vibrator: Vibrator
     private lateinit var detectedPresenter: DetectedPresenter
     private val viewModel: MainActivityViewModel by viewModels()
+
     private val settings: Settings by lazy {
         Settings.get()
     }
+
     private var resultSet: Set<ScanResult> = emptySet()
 
 
@@ -62,9 +69,75 @@ class ScanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)   //ツールバー
+        binding = ActivityScanBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
-        setSupportActionBar(toolbar)                        //アクションバーにツールバーをセット
+        adapter = ScanResultAdapter(this) {
+            ScanResultDialog.show(this, it)
+        }
+        binding.resultList.adapter = adapter
+        binding.resultList.addItemDecoration(
+            DividerItemDecoration(this, DividerItemDecoration.VERTICAL),
+        )
+        // Vibratorをシステムサービスから取得する
+        vibrator = getSystemService()!!
+
+        bcdScanner = BcdScanner(this, binding.previewView, ::onDetectCode)
+
+        /*
+        binding.flash.setOnClickListener {
+            codeScanner.toggleTorch()
+        }
+        bcdScanner.torchStateFlow.observe(this) {
+            onFlashOn(it)
+        }
+
+         */
+
+        // 検出プレゼンターを初期化する
+        detectedPresenter = DetectedPresenter(
+            bcdScanner = bcdScanner,
+            detectedMarker = binding.detectedMarker,
+            stillImage = binding.stillImage,
+        )
+        val size = viewModel.resultFlow.value.size
+        if (size >= 2) {
+            binding.dummy.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                height = 0
+            }
+        }
+
+        // ビューモデルのスキャン結果フローを観察し、結果が変更されたときの処理を設定する
+        viewModel.resultFlow.observe(this) {
+            resultSet = it.toSet()
+            adapter.onChanged(it)
+            binding.resultList.scrollToPosition(adapter.itemCount - 1)
+            if (it.isNotEmpty()) {
+                binding.scanning.isGone = true
+            }
+            if (it.size == 2) {
+                expandList()
+            }
+        }
+
+        // カメラのパーミッションを持っているかどうかを確認し、カメラを開始するかリクエストする
+        if (CameraPermission.hasPermission(this)) {
+            startCamera()
+            Updater.startIfAvailable(this)
+        } else {
+            launcher.launch()
+        }
+
+        // カメラのパーミッションのリクエスト結果を処理するリスナーを登録する
+        DialogPermission.registerListener(this, CAMERA_PERMISSION_REQUEST_KEY) {
+            finishByError()
+        }
+
+
+
+        //val toolbar = findViewById<Toolbar>(R.id.toolbar)   //ツールバー
+       //setSupportActionBar(toolbar)                        //アクションバーにツールバーをセット
         supportActionBar?.setDisplayHomeAsUpEnabled(true)   //ツールバーに戻るボタンを設置
     }
 
@@ -170,12 +243,16 @@ class ScanActivity : AppCompatActivity() {
     }
 
     private fun vibrate() {
+
         if (!settings.vibrate) return
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
             vibrator.vibrate(
                 VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE),
             )
         } else {
+
             @Suppress("DEPRECATION")
             vibrator.vibrate(30)
         }

@@ -23,9 +23,7 @@
     <string name="label_format">format:</string>
     <string name="label_type">type:</string>
 
-    <string name="action_copy">コピー</string>
-    <string name="action_share">シェア</string>
-    <string name="action_open">開く</string>
+    <string name="action_send">送信</string>
 
     <string name="preference_category_settings">設定</string>
     <string name="preference_title_vibration">バイブ</string>
