@@ -30,6 +30,7 @@
 
     <!-- 文言 -->
     <string name="txt_bluetoothAddress">Bluetoothアドレス</string>
+    <string name="txt_bluetooth_connected">Bluetooth接続中...</string>
 
 
     <string name="preference_category_settings">設定</string>

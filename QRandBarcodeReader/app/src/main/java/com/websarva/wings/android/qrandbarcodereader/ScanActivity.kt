@@ -70,8 +70,8 @@ class ScanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
 
+        //BlueTooth接続待機
         Thread(Runnable {
-
             //テストアプリなので3秒sleepしていますが、本来はここで実行したいバックグラウンド動作を実装してください。
             try {
                 Thread.sleep(3000)
