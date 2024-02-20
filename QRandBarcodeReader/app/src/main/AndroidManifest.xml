@@ -13,6 +13,15 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
+    <!--アプリケーションがBluetooth機能を使用するために、デバイスがBluetoothをサポートしていることを宣言する-->
+    <uses-feature android:name="android.hardware.bluetooth"/>
+    <!--アプリケーションがBluetooth機能にアクセスするために必要な権限を宣言する-->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <!--Bluetooth機能を制御するために必要な権限を宣言する-->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!--Bluetooth接続を確立するために必要な権限を宣言する-->
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"

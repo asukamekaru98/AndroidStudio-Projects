@@ -14,7 +14,6 @@ import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.websarva.wings.android.qrandbarcodereader.Constants.PREF_INPUT_VALUES
 import java.util.TimerTask
-import java.util.UUID
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,9 +28,6 @@ class MainActivity : AppCompatActivity() {
         private const val STORAGE_REQUEST_CODE = 101
 
         private const val TAG = "MAIN_TAG"
-
-        private const val REQUEST_BLUETOOTH_CONNECT = 100
-        private val MY_UUID: UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
     }
 
     /* BlueTooth */

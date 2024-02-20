@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.Point
+import android.util.Log
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import androidx.camera.core.ImageProxy
@@ -22,6 +23,8 @@ class DetectedPresenter(
         imageProxy: ImageProxy,
         detectedCodes: List<Barcode>,
     ) {
+        Log.d("TAG", "onDetected")
+
         bcdScanner.pause()
         val pointsList = detectedCodes.mapNotNull { it.toCornerPoints() }
         detectedMarker.setMarkers(imageProxy, pointsList)
@@ -39,12 +42,18 @@ class DetectedPresenter(
     }
 
     private fun Barcode.toCornerPoints(): Array<Point>? {
+
+        Log.d("TAG", "toCornerPoints")
+
         val cornerPoints = cornerPoints ?: return null
         if (cornerPoints.isEmpty()) return null
         return cornerPoints
     }
 
     private fun onEnd() {
+
+        Log.d("TAG", "onEnd")
+
         detectedMarker.postDelayed({
             detectedMarker.clearMarker()
             stillImage.setImageBitmap(null)
@@ -55,8 +64,14 @@ class DetectedPresenter(
 
     private fun toBitmap(imageProxy: ImageProxy): Bitmap =
         if (imageProxy.imageInfo.rotationDegrees == 0) {
+
+            Log.d("TAG", "toBitmap true")
+
             imageProxy.toBitmap()
         } else {
+
+            Log.d("TAG", "toBitmap false")
+
             val temp = imageProxy.toBitmap()
             val matrix = Matrix().apply {
                 postRotate(imageProxy.imageInfo.rotationDegrees.toFloat())

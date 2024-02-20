@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -28,11 +29,17 @@ class DialogPermission : DialogFragment() {
     }
 
     override fun onCancel(dialog: DialogInterface) {
+
+        Log.d("TAG", "onCancel")
+
         val requestKey = requireArguments().getString(REQUEST_KEY, "")
         parentFragmentManager.setFragmentResult(requestKey, Bundle())
     }
 
     private fun startAppInfo(context: Context) {
+
+        Log.d("TAG", "startAppInfo")
+
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
             data = Uri.parse("package:" + context.packageName)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -49,6 +56,9 @@ class DialogPermission : DialogFragment() {
             requestKey: String,
             onCancel: () -> Unit,
         ) {
+
+            Log.d("TAG", "registerListener")
+
             val manager = activity.supportFragmentManager
             manager.setFragmentResultListener(requestKey, activity) { _, _ ->
                 onCancel()
@@ -56,6 +66,9 @@ class DialogPermission : DialogFragment() {
         }
 
         fun show(activity: FragmentActivity, requestKey: String) {
+
+            Log.d("TAG", "DialogPermission.show")
+
             val manager = activity.supportFragmentManager
             if (manager.isStateSaved) return
             if (manager.findFragmentByTag(TAG) != null) return

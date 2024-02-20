@@ -9,6 +9,7 @@ package com.websarva.wings.android.qrandbarcodereader.result
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
@@ -16,7 +17,12 @@ import androidx.fragment.app.FragmentActivity
 import com.websarva.wings.android.qrandbarcodereader.R
 import com.websarva.wings.android.qrandbarcodereader.databinding.ScanResultBinding
 class ScanResultDialog : DialogFragment() {
+
+    //スキャン結果表示
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
+        Log.d("TAG", "onCreateDialog")
+
         val activity = requireActivity()
         val binding = ScanResultBinding.inflate(activity.layoutInflater)
         val result: ScanResult? = requireArguments().getParcelable(KEY_SCAN_RESULT)
@@ -24,27 +30,7 @@ class ScanResultDialog : DialogFragment() {
             binding.resultValue.text = result.value
             binding.resultType.text = result.type
             binding.resultFormat.text = result.format
-            /*
-            binding.openButton.setText(R.string.action_open)
-            binding.openButton.setOnClickListener {
-                if (!Launcher.openUri(activity, result.value)) {
-                    Launcher.search(activity, result.value)
-                }
-                ReviewRequester.onAction()
-                dismiss()
-            }
-            binding.copyButton.setOnClickListener {
-                ClipboardUtils.copyToClipboard(activity, result.type, result.value)
-                ReviewRequester.onAction()
-                dismiss()
-            }
-            binding.shareButton.setOnClickListener {
-                Launcher.shareText(activity, result.value)
-                ReviewRequester.onAction()
-                dismiss()
-            }
 
-             */
         }
         return AlertDialog.Builder(activity)
             .setTitle(R.string.dialog_title_select_action)
@@ -57,6 +43,9 @@ class ScanResultDialog : DialogFragment() {
         private const val KEY_SCAN_RESULT = "KEY_SCAN_RESULT"
 
         fun show(activity: FragmentActivity, result: ScanResult) {
+
+            Log.d("TAG", "onCreateDialog.show")
+
             val manager = activity.supportFragmentManager
             if (manager.isStateSaved) return
             if (manager.findFragmentByTag(TAG) != null) return

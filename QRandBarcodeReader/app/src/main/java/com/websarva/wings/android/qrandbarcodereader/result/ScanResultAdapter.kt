@@ -8,6 +8,7 @@
 package com.websarva.wings.android.qrandbarcodereader.result
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
@@ -28,6 +29,9 @@ class ScanResultAdapter(
         ViewHolder(ScanResultBinding.inflate(layoutInflater, parent, false))
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+        Log.d("TAG", "onBindViewHolder")
+
         val result = results[position]
         holder.apply(result)
         holder.itemView.setOnClickListener {
@@ -38,6 +42,9 @@ class ScanResultAdapter(
     override fun getItemCount(): Int = results.size
 
     override fun onChanged(value: List<ScanResult>) {
+
+
+
         val diff = DiffUtil.calculateDiff(DiffCallback(results, value))
         results = value
         diff.dispatchUpdatesTo(this)
@@ -61,6 +68,9 @@ class ScanResultAdapter(
         private val binding: ScanResultBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun apply(result: ScanResult) {
+
+            Log.d("TAG", "apply")
+
             binding.resultValue.text = result.value
             binding.resultType.text = result.type
             binding.resultFormat.text = result.format
