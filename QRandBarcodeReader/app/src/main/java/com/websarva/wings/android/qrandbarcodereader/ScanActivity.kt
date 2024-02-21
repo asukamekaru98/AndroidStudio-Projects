@@ -15,6 +15,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -79,8 +80,11 @@ class ScanActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_scan)
 
+		//BlueToothアドレス
+		//val blueToothAddress : String? = intent.getStringExtra(Constants.KEY_STAT_TRANS_BT_ADRS)
+
 		// BlueToothクラスのインスタンスを生成して初期化
-		blueTooth = BlueTooth(this)
+		blueTooth = BlueTooth(this,intent.getStringExtra(Constants.KEY_STAT_TRANS_BT_ADRS).toString())
 
 		Thread(Runnable {
 			try {
@@ -195,9 +199,14 @@ class ScanActivity : AppCompatActivity() {
 
 	override fun finish() { //処理終了時に呼び出す関数
 
+		Log.d("TAG", "ScanActivity:finish")
+
+		blueTooth.finish()
+
 		if (ReviewRequester.requestIfNecessary(this)) {
 			return
 		}
+
 		super.finish()
 	}
 

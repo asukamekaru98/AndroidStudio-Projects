@@ -13,6 +13,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.io.FileNotFoundException
 import java.io.IOException
 import java.util.TimerTask
 import java.util.UUID
@@ -33,11 +34,10 @@ class BlueTooth : AppCompatActivity{
 	//タイマータスク
 	private var timerTask: TimerTask? = null
 
+	private val blueToothAddress:String
 
 	fun sendBluetooth(getValue:String,getType:String){   //接続機に値を送信する処理
 
-		Log.d("TAG", "getValue:$getValue")
-		Log.d("TAG", "getType:$getType")
 		val bcdType = when (getType) {
 			"CODE128" -> 'K'
 			"CODE39" -> 'M'
@@ -58,22 +58,19 @@ class BlueTooth : AppCompatActivity{
 		//新盛識別ID + スキャンコード + CR
 		val sendValue = bcdType + getValue + 0x0D
 
-		Log.d("TAG", "sendValue:$sendValue")
-
 		bluetoothSocket?.outputStream?.write(sendValue.toByteArray())
 
 	}
 
 
-	constructor(text: Context){
+	constructor(text: Context,btAdrs:String){
 		context = text
+		blueToothAddress = btAdrs
 
 		checkBluetoothPermissions()
 	}
 
 	fun setupBluetooth():Boolean{   //BlueToothのセットアップ
-
-		Log.d("TAG", "Bt_A")
 
 		//BlueToothアダプタ取得
 		if(!getBluetoothAdapter())return false
@@ -87,8 +84,6 @@ class BlueTooth : AppCompatActivity{
 
 		bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
 
-		Log.d("TAG", "1.bluetoothAdapter = $bluetoothAdapter")
-
 		return bluetoothAdapter != null
 	}
 
@@ -98,68 +93,86 @@ class BlueTooth : AppCompatActivity{
 		//アンドロイドverの確認(12以上か) と BlueToothバーミッション付与の確認
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(context,Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED)
 		{
-			Log.d("TAG", "Bt_E")
-
 			//パーミッションリクエスト
 			ActivityCompat.requestPermissions(context as Activity,arrayOf(Manifest.permission.BLUETOOTH_CONNECT),REQUEST_BLUETOOTH_CONNECT)
-		} else {
-			Log.d("TAG", "Bt_DD")
-
 		}
-		Log.d("TAG", "Bt_DDD")
+
 		return true
 	}
 
 	private fun setupBluetoothConnection():Boolean {    //BlueTooth接続処理
-
-		Log.d("TAG", "Bt_F")
-
 		if (ContextCompat.checkSelfPermission(context,Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-			Log.d("TAG", "Bt_FF")
+
 			//パーミッションがが付与されていれば接続を試みる
 			try {
 				val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
-				Log.d("TAG", "pairedDevices = $pairedDevices")
-				val device = pairedDevices?.firstOrNull { it.address == "D8:80:39:F6:01:AF" }
-				Log.d("TAG", "device = $device")
+				val device = pairedDevices?.firstOrNull { it.address == blueToothAddress }
 
 				device?.let {
 					if (bluetoothSocket == null || bluetoothSocket?.isConnected == false) {
 						bluetoothSocket = it.createRfcommSocketToServiceRecord(MY_UUID)
 
-						Log.d("TAG", "Bt_H")
-
 						bluetoothSocket?.connect()
-
-						Log.d("TAG", "Bt_I")
-
 						isConnected = true
 					}
 				}
-			} catch (e: Exception) {
+			} catch (e: RuntimeException) {
+				Log.d("TAG", "BlueTooth:setupBluetoothConnection_RuntimeException")
+				return false
+			}catch (e: IOException) {
+				Log.d("TAG", "BlueTooth:setupBluetoothConnection_ IOException")
+				return false
+			}
+			catch (e: FileNotFoundException) {
+				Log.d("TAG", "BlueTooth:setupBluetoothConnection_ FileNotFoundException")
+				return false
+			}
+			catch (e: IllegalArgumentException) {
+				Log.d("TAG", "BlueTooth:setupBluetoothConnection_ IllegalArgumentException")
+				return false
+			}
+			catch (e: IllegalStateException) {
+				Log.d("TAG", "BlueTooth:setupBluetoothConnection_ IllegalStateException")
+				return false
+			}
+			catch (e: Exception) {
+				Log.d("TAG", "BlueTooth:setupBluetoothConnection_ Exception")
 				//接続失敗したとき
-				Log.d("TAG", "Bt_J")
 				return false
 			}
 		} else {
 			//パーミッションが付与されてないとき
-			Log.d("TAG", "Bt_K")
 			return false
 		}
-
 		//接続成功したとき
-		Log.d("TAG", "Bt_L")
 		return true
 	}
 
+
+	override fun finish(){
+
+		Log.d("TAG", "BlueTooth:finish()")
+
+		try {
+			isConnected = false
+			bluetoothSocket?.close()
+		} catch (e: IOException) {
+			Log.d("TAG", "BlueTooth:finish()_ IOException")
+		}
+
+		super.finish()
+	}
+
 	override fun onDestroy() {  //アクティビティ破棄
-		Log.d("TAG", "Btデストロイ")
+
+		Log.d("TAG", "BlueTooth:onDestroy")
+
 		super.onDestroy()
 		timerTask?.cancel()
 		try {
 			bluetoothSocket?.close()
 		} catch (e: IOException) {
-			//
+
 		}
 	}
 

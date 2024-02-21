@@ -11,6 +11,7 @@ object Constants {
     /*  key名    */
     const val KEY_BT_ADRS = "KEY_BT_ADRS"               //Bluetoothアドレス入力欄で使う
     const val KEY_SEND_VAL = "KEY_SEND_VAL"             //送信値入力欄で使う
+    const val KEY_STAT_TRANS_BT_ADRS = "KEY_STAT_TRANS_BT_ADRS" //画面遷移時、Bluetoothアドレス送信キー
 
     /*  プリファレンスファイル名  */
     const val PREF_INPUT_VALUES = "inputValues"              //入力値を保存するプリファレンス

@@ -1,22 +1,6 @@
 package com.websarva.wings.android.qrandbarcodereader.Barcode
 
 import androidx.activity.ComponentActivity
-import androidx.core.content.ContextCompat
-
-
-
-import com.google.mlkit.vision.barcode.BarcodeScanner
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
-import kotlinx.coroutines.flow.MutableStateFlow
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-
-//AndroidX Lifecycle
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-
-//AndroidX Camera
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -27,11 +11,16 @@ import androidx.camera.core.resolutionselector.AspectRatioStrategy
 import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-
-//Timber
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
+import kotlinx.coroutines.flow.MutableStateFlow
 import timber.log.Timber
-
-//クラス
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 
 class BcdScanner(
