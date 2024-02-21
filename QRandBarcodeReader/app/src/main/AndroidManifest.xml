@@ -6,12 +6,9 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.CAMERA"
-        android:permissionGroup="android.permission-group.CAMERA"/>
-
+    <uses-permission android:name="android.permission.CAMERA" android:permissionGroup="android.permission-group.CAMERA"/>
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
 
     <!--アプリケーションがBluetooth機能を使用するために、デバイスがBluetoothをサポートしていることを宣言する-->
     <uses-feature android:name="android.hardware.bluetooth"/>

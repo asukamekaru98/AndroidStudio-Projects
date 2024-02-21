@@ -34,3 +34,4 @@ fun Barcode.formatStr(): String =
         Barcode.FORMAT_AZTEC -> "Aztec"
         else -> "unknown"
     }
+

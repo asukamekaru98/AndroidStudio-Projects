@@ -10,9 +10,9 @@ package com.websarva.wings.android.qrandbarcodereader
 //import com.websarva.wings.android.qrandbarcodereader.util.Launcher
 //BlueTooth
 
+import android.Manifest
 import android.animation.ValueAnimator
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothSocket
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -25,12 +25,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ImageProxy
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isGone
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.websarva.wings.android.qrandbarcodereader.Barcode.BcdScanner
+import com.websarva.wings.android.qrandbarcodereader.BlueTooth.BlueTooth
 import com.websarva.wings.android.qrandbarcodereader.constant.formatStr
 import com.websarva.wings.android.qrandbarcodereader.constant.typeStr
 import com.websarva.wings.android.qrandbarcodereader.databinding.ActivityScanBinding
@@ -57,10 +59,7 @@ class ScanActivity : AppCompatActivity() {
 
 	private lateinit var binding: ActivityScanBinding   //バインド
 	private lateinit var bcdScanner: BcdScanner         //バーコードスキャナ
-
-	private var bluetoothAdapter: BluetoothAdapter? = null
-	private var bluetoothSocket: BluetoothSocket? = null
-	private var isConnected: Boolean = false
+	private lateinit var blueTooth: BlueTooth           //BlueTooth
 
 	private var started: Boolean = false
 	private val launcher = registerForCameraPermissionRequest { granted, succeedToShowDialog ->
@@ -89,35 +88,57 @@ class ScanActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_scan)
 
-		//BlueTooth接続待機
-		Thread(Runnable {
-			//テストアプリなので3秒sleepしていますが、本来はここで実行したいバックグラウンド動作を実装してください。
-			try {
+		// BlueToothクラスのインスタンスを生成して初期化
+		blueTooth = BlueTooth(this)
 
-				//アダプタ取得
-				bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-				if (bluetoothAdapter == null) {
-					/*  Bluetoothが利用できないとき    */
+		if (ContextCompat.checkSelfPermission(
+				this, Manifest.permission.BLUETOOTH_CONNECT) ==
+			PackageManager.PERMISSION_GRANTED) {
+			// PERMISSION_GRANTED
+			Log.d("TAG", "PERMISSION_GRANTED")
+		} else {
+			// PERMISSION_DENIED
+			Log.d("TAG", "PERMISSION_DENIED")
+		}
+
+		if (ContextCompat.checkSelfPermission(
+				this, Manifest.permission.CAMERA) ==
+			PackageManager.PERMISSION_GRANTED) {
+			// PERMISSION_GRANTED
+			Log.d("TAG", "CAMERA PERMISSION_GRANTED")
+		} else {
+			// PERMISSION_DENIED
+			Log.d("TAG", "CAMERA PERMISSION_DENIED")
+		}
+
+		Thread(Runnable {
+			Log.d("TAG", "A")
+			try {
+				//BlueTooth接続待機
+				if (!blueTooth.setupBluetooth()) {
+
+					//アダプタ取得失敗
 					Log.d("TAG", "bluetoothAdapter == null")
 
-					Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show()
+					//Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show()
+
+					// 一つ前の画面に遷移
+					//onBackPressed()
+					//return@Runnable
+
 					finish()//強制終了
 				}
+				Log.d("TAG", "AA")
+				//Thread.sleep(3000)
 
-
-
-
-
-
-
-
-
-
-				Thread.sleep(3000)
 			} catch (e: InterruptedException) {
+				Log.d("TAG", "B")
 				return@Runnable
 			}
 			runOnUiThread {
+				Log.d("TAG", "runOnUiThread")
+
+				//描画切替 ロード画面 -> カメラ
 				findViewById<View>(R.id.LL_Load).visibility = View.GONE
 				findViewById<View>(R.id.LL_Main).visibility = View.VISIBLE
 			}
@@ -130,12 +151,17 @@ class ScanActivity : AppCompatActivity() {
 		//スキャン情報を見せる処理
 		adapter = ScanResultAdapter(this) {
 
+			Log.d("TAG", "こんにちは")
+
+
 			//val result: ScanResult? = requireArguments().getParcelable(KEY_SCAN_RESULT)
+
+			blueTooth.sendBluetooth(it.value)
 
 			//bluetoothSocket?.outputStream?.write(sEditTextSendText.toByteArray())
 
 
-		//ScanResultDialog.show(this, it)
+			//ScanResultDialog.show(this, it)
 		}
 
 		binding.resultList.adapter = adapter
@@ -199,67 +225,13 @@ class ScanActivity : AppCompatActivity() {
 		// android.R.id.home に戻るボタンを押した時のidが取得できる
 		if (item.itemId == android.R.id.home) {
 			// 今回はActivityを終了させている
+			Log.d("TAG", "go to home")
 			finish()
+			Log.d("TAG", "after finish()")
 		}
 		return super.onOptionsItemSelected(item)
 	}
-/*
-	private fun setupBluetoothConnection() {
-		if (ContextCompat.checkSelfPermission(this,Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_GRANTED) {
-			try {
-				val pairedDevices: Set<BluetoothDevice>? = bluetoothAdapter?.bondedDevices
-				val device = pairedDevices?.firstOrNull { it.address == "sEditTextBtText" }
 
-				device?.let {
-					if (bluetoothSocket == null || bluetoothSocket?.isConnected == false) {
-						bluetoothSocket = it.createRfcommSocketToServiceRecord(MY_UUID)
-						bluetoothSocket?.connect()
-						isConnected = true
-					}
-
-					//bluetoothSocket?.outputStream?.write(sEditTextSendText.toByteArray(Charsets.UTF_8))
-					bluetoothSocket?.outputStream?.write(sEditTextSendText.toByteArray())
-				}
-
-
-			} catch (e: IOException) {
-				Toast.makeText(
-					this,
-					"Could not establish Bluetooth connection",
-					Toast.LENGTH_SHORT
-				).show()
-
-				super.finish()//強制終了
-
-			} catch (e: SecurityException) {
-				Toast.makeText(
-					this,
-					"Bluetooth permission is required",
-					Toast.LENGTH_SHORT
-				).show()
-
-				super.finish()//強制終了
-
-			} catch (e: Exception) {
-				Toast.makeText(
-					this,
-					"An unexpected error occurred",
-					Toast.LENGTH_SHORT
-				).show()
-
-				super.finish()//強制終了
-			}
-		} else {
-			Toast.makeText(
-				this,
-				"Bluetooth permission is required",
-				Toast.LENGTH_SHORT
-			).show()
-
-			super.finish()//強制終了
-		}
-	}
-*/
 	override fun onRestart() {
 
 	Log.d("TAG", "onRestart")
@@ -274,7 +246,7 @@ class ScanActivity : AppCompatActivity() {
 		}
 	}
 
-	private fun finishByError() {
+	private fun finishByError() {   //エラーで終了するときに呼ばれる関数
 
 		Log.d("TAG", "finishByError")
 
@@ -282,8 +254,7 @@ class ScanActivity : AppCompatActivity() {
 		super.finish()
 	}
 
-	//処理終了時に呼び出す関数
-	override fun finish() {
+	override fun finish() { //処理終了時に呼び出す関数
 
 		if (ReviewRequester.requestIfNecessary(this)) {
 			return
@@ -291,7 +262,7 @@ class ScanActivity : AppCompatActivity() {
 		super.finish()
 	}
 
-	private fun toastPermissionError() {
+	private fun toastPermissionError() {    //パーミッション付与されてない時
 
 		Log.d("TAG", "toastPermissionError")
 
@@ -310,7 +281,7 @@ class ScanActivity : AppCompatActivity() {
 
 	 */
 
-	private fun startCamera() {
+	private fun startCamera() { //カメラ描写開始
 
 		Log.d("TAG", "startCamera")
 
@@ -319,8 +290,8 @@ class ScanActivity : AppCompatActivity() {
 		bcdScanner.start()
 	}
 
-	//バーコード検出処理
-	private fun onDetectCode(imageProxy: ImageProxy, codes: List<Barcode>) {
+
+	private fun onDetectCode(imageProxy: ImageProxy, codes: List<Barcode>) {    //バーコード検出処理
 
 		val detected = mutableListOf<Barcode>()
 		codes.forEach {
@@ -341,8 +312,8 @@ class ScanActivity : AppCompatActivity() {
 		detectedPresenter.onDetected(imageProxy, detected)
 	}
 
-	//バーコードを2以上読み込んだときにリスト化させる
-	private fun expandList() {
+
+	private fun expandList() {  //バーコードを2以上読み込んだときにリスト化させる
 
 		ValueAnimator.ofInt(binding.dummy.height, 0)
 			.also {
@@ -354,8 +325,8 @@ class ScanActivity : AppCompatActivity() {
 			}.start()
 	}
 
-	//バイブレーション処理
-	private fun vibrate() {
+
+	private fun vibrate() { //バイブレーション処理
 
 		Log.d("TAG", "vibrate")
 
