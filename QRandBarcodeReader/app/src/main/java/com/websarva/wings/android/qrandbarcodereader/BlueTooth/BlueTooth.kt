@@ -34,10 +34,36 @@ class BlueTooth : AppCompatActivity{
 	private var timerTask: TimerTask? = null
 
 
-	fun sendBluetooth(sendString:String){   //接続機に値を送信する処理
+	fun sendBluetooth(getValue:String,getType:String){   //接続機に値を送信する処理
 
-		bluetoothSocket?.outputStream?.write(sendString.toByteArray())
+		Log.d("TAG", "getValue:$getValue")
+		Log.d("TAG", "getType:$getType")
+		val bcdType = when (getType) {
+			"CODE128" -> 'K'
+			"CODE39" -> 'M'
+			//Barcode.FORMAT_CODE_93 -> ""
+			"Codabar/NW-7" -> 'N'
+			//Barcode.FORMAT_DATA_MATRIX -> ""
+			"JAN13/EAN13" -> 'A'
+			"JAN8/EAN8" -> 'B'
+			"ITF" -> 'I'
+			"QR" -> 'q'
+			"UPC-A" -> 'A'
+			"UPC-E" -> 'C'
+			"PDF417" -> 'p'
+			//Barcode.FORMAT_AZTEC -> ""
+			else -> 'X'
+		}
+
+		//新盛識別ID + スキャンコード + CR
+		val sendValue = bcdType + getValue + 0x0D
+
+		Log.d("TAG", "sendValue:$sendValue")
+
+		bluetoothSocket?.outputStream?.write(sendValue.toByteArray())
+
 	}
+
 
 	constructor(text: Context){
 		context = text
