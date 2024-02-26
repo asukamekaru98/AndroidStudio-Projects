@@ -1,7 +1,7 @@
 package com.websarva.wings.android.qrandbarcodereader.constant
 
-import com.google.mlkit.vision.barcode.common.Barcode
-
+//import com.google.mlkit.vision.barcode.common.Barcode
+/*
 fun Barcode.bcdFormatStr(): String =
 	when (format) {
 		Barcode.FORMAT_CODE_128 -> "K"
@@ -19,3 +19,5 @@ fun Barcode.bcdFormatStr(): String =
 		//Barcode.FORMAT_AZTEC -> ""
 		else -> "X"
 	}
+
+ */
