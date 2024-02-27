@@ -46,17 +46,13 @@ class MainActivity : AppCompatActivity() {
         //ボタン：Bluetoothアドレススキャン押下
         btnBluetoothAdrScan.setOnClickListener{
 
-        }
-
-        btnBluetoothAdrScan.setOnClickListener{
-
             //ScanBlueToothAddressActivityに遷移
             val intent = Intent(
                 application,
-                ScanActivity::class.java
+                ScanBlueToothAddressActivity::class.java
             )
 
-            intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
+            //intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
 
             startActivity(intent)
         }

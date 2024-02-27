@@ -51,6 +51,11 @@
             android:name=".ScanActivity"
             android:theme="@style/Theme.CodeReader.NoActionBar"
             />
+
+        <activity
+            android:name=".ScanBlueToothAddressActivity"
+            android:theme="@style/Theme.CodeReader.NoActionBar"
+            />
     </application>
 
 </manifest>

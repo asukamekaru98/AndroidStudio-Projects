@@ -100,6 +100,7 @@ class ScanActivity : AppCompatActivity() {
 			}
 			runOnUiThread {
 				//描画切替 ロード画面 -> カメラ
+				//setContentView(R.layout.activity_scan)
 				findViewById<View>(R.id.LL_Load).visibility = View.GONE
 				findViewById<View>(R.id.LL_Main).visibility = View.VISIBLE
 			}
