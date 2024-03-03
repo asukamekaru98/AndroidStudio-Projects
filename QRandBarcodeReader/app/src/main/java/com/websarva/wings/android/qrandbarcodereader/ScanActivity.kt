@@ -70,7 +70,7 @@ class ScanActivity : AppCompatActivity() {
 	private lateinit var detectedPresenter: DetectedPresenter
 	private val viewModel: MainActivityViewModel by viewModels()
 
-	private  lateinit var timer: CountDownTimer
+	//private  lateinit var timer: CountDownTimer
 
 	private val settings: Settings by lazy {
 		Settings.get()
@@ -90,10 +90,11 @@ class ScanActivity : AppCompatActivity() {
 		blueTooth = BlueTooth(this,intent.getStringExtra(Constants.KEY_STAT_TRANS_BT_ADRS).toString())
 
 		Thread(Runnable {
+
 			try {
 				//BlueTooth接続待機
 				if (!blueTooth.setupBluetooth()) {
-
+					//FailBlueToothConnect()
 					finish()//強制終了
 				}
 				//Thread.sleep(3000)
@@ -116,11 +117,11 @@ class ScanActivity : AppCompatActivity() {
 		setContentView(binding.root)
 		setSupportActionBar(binding.toolbar)
 
-		var second:Long = 30
+		//var second:Long = 30
 
 		//binding.tvTimeOutCounter.text = "残り${second.toString().padStart(2, '0')}秒..."
 
-
+/*
 		timer = object : CountDownTimer(30000, 1000) {
 			override fun onFinish() {
 				finish()//強制終了
@@ -133,8 +134,9 @@ class ScanActivity : AppCompatActivity() {
 				second--
 				binding.tvTimeOutCounter.text = "残り${second.toString().padStart(2, '0')}秒..."
 			}
-		}
-		timer.start()
+		}*/
+
+		//timer.start()
 
 		//スキャン情報を見せる処理
 		adapter = ScanResultAdapter(this) {
@@ -193,6 +195,22 @@ class ScanActivity : AppCompatActivity() {
 
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)   //ツールバーに戻るボタンを設置
 	}
+/*
+	private fun FailBlueToothConnect(){
+
+		val t = Toast.makeText(applicationContext, "接続に失敗しました", Toast.LENGTH_LONG);
+/*
+		t.addCallback(object : Toast.Callback() {
+			override fun onToastHidden() {
+				super.onToastHidden()
+
+				//finish()//強制終了
+			}
+		})
+		t.show()
+
+ */
+	}*/
 
 
 	// ツールバーのアイテムを押した時の処理を記述（今回は戻るボタンのみのため、戻るボタンを押した時の処理しか記述していない）
