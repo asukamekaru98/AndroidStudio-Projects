@@ -13,6 +13,7 @@ package com.websarva.wings.android.qrandbarcodereader
 import android.animation.ValueAnimator
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
@@ -69,6 +70,8 @@ class ScanActivity : AppCompatActivity() {
 	private lateinit var detectedPresenter: DetectedPresenter
 	private val viewModel: MainActivityViewModel by viewModels()
 
+	private  lateinit var timer: CountDownTimer
+
 	private val settings: Settings by lazy {
 		Settings.get()
 	}
@@ -98,6 +101,7 @@ class ScanActivity : AppCompatActivity() {
 			} catch (e: InterruptedException) {
 				return@Runnable
 			}
+
 			runOnUiThread {
 				//描画切替 ロード画面 -> カメラ
 				//setContentView(R.layout.activity_scan)
@@ -106,9 +110,31 @@ class ScanActivity : AppCompatActivity() {
 			}
 		}).start()
 
+
+
 		binding = ActivityScanBinding.inflate(layoutInflater)
 		setContentView(binding.root)
 		setSupportActionBar(binding.toolbar)
+
+		var second:Long = 30
+
+		//binding.tvTimeOutCounter.text = "残り${second.toString().padStart(2, '0')}秒..."
+
+
+		timer = object : CountDownTimer(30000, 1000) {
+			override fun onFinish() {
+				finish()//強制終了
+				//binding.startButton.isVisible = true
+				//secondAll = hour * 3600 + minute * 60 + second
+				//binding.tvTimeOutCounter.text = "${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:${second.toString().padStart(2, '0')}"
+			}
+
+			override fun onTick(millisUntilFinished: Long) {
+				second--
+				binding.tvTimeOutCounter.text = "残り${second.toString().padStart(2, '0')}秒..."
+			}
+		}
+		timer.start()
 
 		//スキャン情報を見せる処理
 		adapter = ScanResultAdapter(this) {
