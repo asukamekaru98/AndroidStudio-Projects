@@ -7,7 +7,6 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,10 +18,9 @@ import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.websarva.wings.android.qrandbarcodereader.Barcode.BcdScanner
-import com.websarva.wings.android.qrandbarcodereader.BlueTooth.BlueTooth
 import com.websarva.wings.android.qrandbarcodereader.constant.formatStr
 import com.websarva.wings.android.qrandbarcodereader.constant.typeStr
-import com.websarva.wings.android.qrandbarcodereader.databinding.ActivityScanBinding
+import com.websarva.wings.android.qrandbarcodereader.databinding.ActivityBluetoothAddressScanBinding
 import com.websarva.wings.android.qrandbarcodereader.permission.CameraPermission
 import com.websarva.wings.android.qrandbarcodereader.permission.DialogPermission
 import com.websarva.wings.android.qrandbarcodereader.permission.registerForCameraPermissionRequest
@@ -40,7 +38,7 @@ class ScanBlueToothAddressActivity : AppCompatActivity(){
         private const val CAMERA_PERMISSION_REQUEST_KEY = "CAMERA_PERMISSION_REQUEST_KEY"
     }
 
-    private lateinit var binding: ActivityScanBinding   //バインド
+    private lateinit var binding: ActivityBluetoothAddressScanBinding   //バインド
     private lateinit var bcdScanner: BcdScanner         //バーコードスキャナ
     //private lateinit var blueTooth: BlueTooth           //BlueTooth
 
@@ -72,34 +70,7 @@ class ScanBlueToothAddressActivity : AppCompatActivity(){
 
         Log.d("TAG", "おあああああああ！！！！！！！！！！")
 
-        //BlueToothアドレス
-        //val blueToothAddress : String? = intent.getStringExtra(Constants.KEY_STAT_TRANS_BT_ADRS)
-
-        // BlueToothクラスのインスタンスを生成して初期化
-        //blueTooth = BlueTooth(this,intent.getStringExtra(Constants.KEY_STAT_TRANS_BT_ADRS).toString())
-/*
-        Thread(Runnable {
-            try {
-                //BlueTooth接続待機
-                if (!blueTooth.setupBluetooth()) {
-
-                    finish()//強制終了
-                }
-                //Thread.sleep(3000)
-
-            } catch (e: InterruptedException) {
-                return@Runnable
-            }
-            runOnUiThread {
-                //描画切替 ロード画面 -> カメラ
-                findViewById<View>(R.id.LL_Load).visibility = View.GONE
-                findViewById<View>(R.id.LL_Main).visibility = View.VISIBLE
-            }
-        }).start()
-
- */
-
-        binding = ActivityScanBinding.inflate(layoutInflater)
+        binding = ActivityBluetoothAddressScanBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
