@@ -5,17 +5,75 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.websarva.wings.android.qrandbarcodereader.Constants.PREF_INPUT_VALUES
 
-class MainActivity : AppCompatActivity() {
 
+
+    class MainActivity : AppCompatActivity() {
+
+        private lateinit var btnBluetoothAdrScan: MaterialButton    //UI Button：Bluetoothアドレススキャン
+
+        private val names: ArrayList<String> = arrayListOf(
+            "Bellflower", "Bougainvillea", "Cosmos", "Cosmos field",
+            "Delphinium", "Flowers", "Lotus", "Spring Flowers"
+        )
+
+        private val photos: ArrayList<Int> = arrayListOf(
+            R.drawable.ard, R.drawable.bomb,
+            R.drawable.fire, R.drawable.kyoto,
+            R.drawable.mochi, R.drawable.skull,
+            R.drawable.torii, R.drawable.trashcan
+        )
+
+        override fun onCreate(savedInstanceState: Bundle?) {
+            super.onCreate(savedInstanceState)
+            setContentView(R.layout.activity_main)
+
+            btnBluetoothAdrScan = findViewById(R.id.btnBluetoothAdrScan)    //Btn：Bluetoothアドレススキャン
+            val recyclerView = findViewById<RecyclerView>(R.id.my_recycler_view)
+
+            // use this setting to improve performance if you know that changes
+            // in content do not change the layout size of the RecyclerView
+            recyclerView.setHasFixedSize(true)
+
+            // use a linear layout manager
+            val rLayoutManager: RecyclerView.LayoutManager
+                    = LinearLayoutManager(this)
+
+            recyclerView.layoutManager = rLayoutManager
+
+            recyclerView.adapter = MyAdapter(photos, names)
+
+
+            //ボタン：Bluetoothアドレススキャン押下
+            btnBluetoothAdrScan.setOnClickListener{
+
+                //ScanBlueToothAddressActivityに遷移
+                val intent = Intent(
+                    application,
+                    ScanBlueToothAddressActivity::class.java
+                )
+
+                //intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
+
+                startActivity(intent)
+            }
+        }
+
+    }
+
+
+    /*
+    class MainActivity : AppCompatActivity() {
 
 
     //private lateinit var binding: ActivityMainBinding           //バインド
-    private lateinit var etBluetoothAddress: EditText           //UI EditText:Bluetoothアドレス
-    private lateinit var btnBluetoothAdrScan: MaterialButton    //UI Button：Bluetoothアドレススキャン
-    private lateinit var btnBcdScan: MaterialButton             //UI Button：バーコードスキャン
+//    private lateinit var etBluetoothAddress: EditText           //UI EditText:Bluetoothアドレス
+//    private lateinit var btnBluetoothAdrScan: MaterialButton    //UI Button：Bluetoothアドレススキャン
+//    private lateinit var btnBcdScan: MaterialButton             //UI Button：バーコードスキャン
 
     private var sEditTextBtText:String = ""
 
@@ -24,9 +82,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        etBluetoothAddress = findViewById(R.id.etBluetoothAddress)      //EdTx：Bluetoothアドレス
-        btnBluetoothAdrScan = findViewById(R.id.btnBluetoothAdrScan)    //Btn：Bluetoothアドレススキャン
-        btnBcdScan = findViewById(R.id.btnBcdScan)                      //Btn：バーコードスキャン
+ //       etBluetoothAddress = findViewById(R.id.etBluetoothAddress)      //EdTx：Bluetoothアドレス
+ //       btnBluetoothAdrScan = findViewById(R.id.btnBluetoothAdrScan)    //Btn：Bluetoothアドレススキャン
+ //       btnBcdScan = findViewById(R.id.btnBcdScan)                      //Btn：バーコードスキャン
 
         //getSharedPreferencesメソッドでSharedPreferencesオブジェクトを取得
         val sharedPref = getSharedPreferences(PREF_INPUT_VALUES, Context.MODE_PRIVATE)
@@ -40,11 +98,11 @@ class MainActivity : AppCompatActivity() {
             savedEditTextBtText = Constants.TXT_DEF_BT_ADRS    //テキスト設定 (Bluetoothアドレス EditText)
         }
 
-        etBluetoothAddress.setText(savedEditTextBtText)    //テキスト設定 (Bluetoothアドレス EditText)
-        etBluetoothAddress.requestFocus()                  // フォーカスを設定
+ //       etBluetoothAddress.setText(savedEditTextBtText)    //テキスト設定 (Bluetoothアドレス EditText)
+ //       etBluetoothAddress.requestFocus()                  // フォーカスを設定
 
         //ボタン：Bluetoothアドレススキャン押下
-        btnBluetoothAdrScan.setOnClickListener{
+//        btnBluetoothAdrScan.setOnClickListener{
 
             //ScanBlueToothAddressActivityに遷移
             val intent = Intent(
@@ -58,24 +116,26 @@ class MainActivity : AppCompatActivity() {
         }
 
         //カメラボタン押下
-        btnBcdScan.setOnClickListener{
+ //       btnBcdScan.setOnClickListener{
+//
+ //           // テキストボックスに入力されている文字列を取得
+ //           sEditTextBtText = etBluetoothAddress.text.toString()
+//
+ //           // プリファレンスに書き込む
+ //           sharedPref.edit().putString(Constants.KEY_BT_ADRS, sEditTextBtText).apply()
+//
+ //           //ScanActivityに遷移
+ //           val intent = Intent(
+ //               application,
+ //               ScanActivity::class.java
+ //           )
+//
+ //           intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
+//
+ //           startActivity(intent)
+ //       }
+ //   }
 
-            // テキストボックスに入力されている文字列を取得
-            sEditTextBtText = etBluetoothAddress.text.toString()
+     */
 
-            // プリファレンスに書き込む
-            sharedPref.edit().putString(Constants.KEY_BT_ADRS, sEditTextBtText).apply()
-
-            //ScanActivityに遷移
-            val intent = Intent(
-                application,
-                ScanActivity::class.java
-            )
-
-            intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
-
-            startActivity(intent)
-        }
-    }
-
-}
+//}

@@ -40,4 +40,15 @@
 
     <string name="preference_category_information">情報</string>
     <string name="preference_title_version">バージョン</string>
+
+    <string name="description">picture</string>
+
+    <string name="dialog_title">テスト</string>
+    <string name="dialog_msg">メッセージ</string>
+    <string name="dialog_btn_ok">OK</string>
+    <string name="dialog_btn_ng">NG</string>
+    <string name="dialog_btn_nu">NU</string>
+    <string name="dialog_ok_toast">OK</string>
+    <string name="dialog_ng_toast">NG</string>
+    <string name="dialog_nu_toast">NU</string>
 </resources>

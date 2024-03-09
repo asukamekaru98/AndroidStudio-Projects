@@ -1,62 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp"
-    tools:context=".MainActivity">
+
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical">
+
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/bu_infomation"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/info_icon_black"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/bu_setting"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/setting_icon_black"/>
+</LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Btn：Bluetoothアドレス" -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBluetoothAdrScan"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/btn_act_scan_bt_address"
+            android:layout_height="50dp"
             android:layout_marginEnd="5dp"
-            android:layout_weight="1"/>
-
-        <!-- TxVi：Bluetoothアドレス -->
-        <TextView
-            android:id="@+id/tv_BluetoothAddress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/txt_bluetoothAddress"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- EdTe：Bluetoothアドレス" -->
-        <EditText
-            android:id="@+id/etBluetoothAddress"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:inputType="text|textPostalAddress"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_BluetoothAddress" />
+            android:layout_weight="1"
+            android:text="@string/btn_act_scan_bt_address" />
 
         <!-- Btn：バーコードスキャン -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBcdScan"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:text="@string/btn_act_scan_bcd" />
-
     </LinearLayout>
 
 
 
-</ScrollView>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <!-- A RecyclerView with some commonly used attributes -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
