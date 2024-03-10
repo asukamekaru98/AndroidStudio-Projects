@@ -17,12 +17,12 @@ import com.websarva.wings.android.qrandbarcodereader.Constants.PREF_INPUT_VALUES
         private lateinit var btnBluetoothAdrScan: MaterialButton    //UI Button：Bluetoothアドレススキャン
 
         private val names: ArrayList<String> = arrayListOf(
-            "Bellflower", "Bougainvillea", "Cosmos", "Cosmos field",
+            "新規追加", "Bougainvillea", "Cosmos", "Cosmos field",
             "Delphinium", "Flowers", "Lotus", "Spring Flowers"
         )
 
         private val photos: ArrayList<Int> = arrayListOf(
-            R.drawable.ard, R.drawable.bomb,
+            R.drawable.plus_icon, R.drawable.bomb,
             R.drawable.fire, R.drawable.kyoto,
             R.drawable.mochi, R.drawable.skull,
             R.drawable.torii, R.drawable.trashcan
@@ -44,7 +44,6 @@ import com.websarva.wings.android.qrandbarcodereader.Constants.PREF_INPUT_VALUES
                     = LinearLayoutManager(this)
 
             recyclerView.layoutManager = rLayoutManager
-
             recyclerView.adapter = MyAdapter(photos, names)
 
 
