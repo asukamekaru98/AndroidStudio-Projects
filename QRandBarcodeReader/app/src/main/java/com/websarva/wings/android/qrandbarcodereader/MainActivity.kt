@@ -56,7 +56,7 @@ import com.websarva.wings.android.qrandbarcodereader.Constants.PREF_INPUT_VALUES
                     ScanBlueToothAddressActivity::class.java
                 )
 
-                //intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
+           //     intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
 
                 startActivity(intent)
             }
@@ -115,25 +115,25 @@ import com.websarva.wings.android.qrandbarcodereader.Constants.PREF_INPUT_VALUES
         }
 
         //カメラボタン押下
- //       btnBcdScan.setOnClickListener{
-//
- //           // テキストボックスに入力されている文字列を取得
- //           sEditTextBtText = etBluetoothAddress.text.toString()
-//
- //           // プリファレンスに書き込む
- //           sharedPref.edit().putString(Constants.KEY_BT_ADRS, sEditTextBtText).apply()
-//
- //           //ScanActivityに遷移
- //           val intent = Intent(
- //               application,
- //               ScanActivity::class.java
- //           )
-//
- //           intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
-//
- //           startActivity(intent)
- //       }
- //   }
+       btnBcdScan.setOnClickListener{
+
+           // テキストボックスに入力されている文字列を取得
+           sEditTextBtText = etBluetoothAddress.text.toString()
+
+           // プリファレンスに書き込む
+           sharedPref.edit().putString(Constants.KEY_BT_ADRS, sEditTextBtText).apply()
+
+           //ScanActivityに遷移
+           val intent = Intent(
+               application,
+               ScanActivity::class.java
+           )
+
+           intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
+
+           startActivity(intent)
+       }
+   }
 
      */
 
