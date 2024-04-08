@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/ShinseiBlue"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -30,52 +30,69 @@
 
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/const_machine_name"
+            android:layout_marginStart="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="@string/const_machine_name" />
 
         <EditText
-            android:id="@+id/edit_text"
+            android:id="@+id/et_machine_name"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="50dp"
+            android:background="@drawable/border_white" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/const_txt_bluetooth_macaddress"
+            android:layout_marginStart="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="@string/const_txt_bluetooth_macaddress" />
 
         <EditText
-            android:id="@+id/edit_text"
+            android:id="@+id/et_bluetooth_macaddress"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/border_white"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="50dp" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/const_txt_machine_viewname"
+            android:layout_marginStart="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="@string/const_txt_machine_viewname" />
 
         <EditText
-            android:id="@+id/edit_text"
+            android:id="@+id/et_machine_viewname"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/border_white"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="50dp" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/const_txt_icon"
+
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="@string/const_txt_icon" />
 
         <Button
             android:id="@+id/button"
-            android:layout_width="match_parent"
+            android:background="@drawable/shinsei_charlogo"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="Button" />
 
         <Button
             android:id="@+id/button2"
+            android:background="@drawable/border"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Button" />

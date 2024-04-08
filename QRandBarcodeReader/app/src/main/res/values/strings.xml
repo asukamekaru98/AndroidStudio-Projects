@@ -42,6 +42,11 @@
     <string name="preference_category_information">情報</string>
     <string name="preference_title_version">バージョン</string>
 
+    <string name="const_machine_name">機器名</string>
+    <string name="const_txt_bluetooth_macaddress">コード</string>
+    <string name="const_txt_machine_viewname">表示名</string>
+    <string name="const_txt_icon">アイコン</string>
+
     <string name="description">picture</string>
 
     <string name="dialog_title">テスト</string>
