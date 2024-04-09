@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.CodeReader.AppBarOverlay">
@@ -23,80 +22,100 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_below="@+id/appBarLayout"
+        android:layout_marginTop="19dp">
 
 
         <TextView
             android:id="@+id/const_machine_name"
-            android:layout_marginStart="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="38dp"
             android:text="@string/const_machine_name" />
 
         <EditText
             android:id="@+id/et_machine_name"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="216dp"
+            android:layout_marginRight="5dp"
             android:background="@drawable/border_white" />
 
         <TextView
             android:id="@+id/const_txt_bluetooth_macaddress"
-            android:layout_marginStart="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="283dp"
             android:text="@string/const_txt_bluetooth_macaddress" />
 
         <EditText
             android:id="@+id/et_bluetooth_macaddress"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/border_white"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="81dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/border_white" />
 
         <TextView
             android:id="@+id/const_txt_machine_viewname"
-            android:layout_marginStart="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="148dp"
             android:text="@string/const_txt_machine_viewname" />
 
         <EditText
             android:id="@+id/et_machine_viewname"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/border_white"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_above="@+id/button"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="350dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="155dp"
+            android:background="@drawable/border_white" />
 
         <TextView
             android:id="@+id/const_txt_icon"
-
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="452dp"
+            android:layout_marginRight="5dp"
             android:text="@string/const_txt_icon" />
 
         <Button
             android:id="@+id/button"
-            android:background="@drawable/shinsei_charlogo"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/button2"
+            android:layout_marginBottom="8dp"
+
+            android:background="@drawable/shinsei_charlogo"
             android:text="Button" />
 
         <Button
             android:id="@+id/button2"
-            android:background="@drawable/border"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/border"
             android:text="Button" />
 
-
-    </LinearLayout>
-</LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>
