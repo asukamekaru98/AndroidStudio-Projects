@@ -15,6 +15,7 @@ import com.websarva.wings.android.qrandbarcodereader.Constants.PREF_INPUT_VALUES
     class MainActivity : AppCompatActivity() {
 
         private lateinit var btnBluetoothAdrScan: MaterialButton    //UI Button：Bluetoothアドレススキャン
+        private lateinit var btnNewConnection: MaterialButton       //UI Button：新規接続
 
         private val names: ArrayList<String> = arrayListOf(
             "新規追加", "Bougainvillea", "Cosmos", "Cosmos field",
@@ -33,6 +34,8 @@ import com.websarva.wings.android.qrandbarcodereader.Constants.PREF_INPUT_VALUES
             setContentView(R.layout.activity_main)
 
             btnBluetoothAdrScan = findViewById(R.id.btnBluetoothAdrScan)    //Btn：Bluetoothアドレススキャン
+            btnNewConnection = findViewById(R.id.btnNewConnection)    //Btn：Bluetoothアドレススキャン
+
             val recyclerView = findViewById<RecyclerView>(R.id.my_recycler_view)
 
             // use this setting to improve performance if you know that changes
@@ -57,6 +60,20 @@ import com.websarva.wings.android.qrandbarcodereader.Constants.PREF_INPUT_VALUES
                 )
 
            //     intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
+
+                startActivity(intent)
+            }
+
+            //ボタン：Bluetoothアドレススキャン押下
+            btnNewConnection.setOnClickListener{
+
+                //ScanBlueToothAddressActivityに遷移
+                val intent = Intent(
+                    application,
+                    ScanBlueToothAddressActivity::class.java
+                )
+
+                //     intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
 
                 startActivity(intent)
             }

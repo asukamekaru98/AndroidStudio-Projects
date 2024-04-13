@@ -46,6 +46,14 @@
         android:orientation="vertical">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNewConnection"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:text="新規接続" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBluetoothAdrScan"
             android:layout_width="match_parent"
             android:layout_height="50dp"
