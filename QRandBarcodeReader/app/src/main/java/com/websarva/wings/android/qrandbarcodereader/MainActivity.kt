@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.websarva.wings.android.qrandbarcodereader.Constants.PREF_INPUT_VALUES
+import com.websarva.wings.android.qrandbarcodereader.registration.RegistrationActivity
 
 
-
-    class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
         private lateinit var btnBluetoothAdrScan: MaterialButton    //UI Button：Bluetoothアドレススキャン
         private lateinit var btnNewConnection: MaterialButton       //UI Button：新規接続
@@ -70,7 +70,7 @@ import com.websarva.wings.android.qrandbarcodereader.Constants.PREF_INPUT_VALUES
                 //ScanBlueToothAddressActivityに遷移
                 val intent = Intent(
                     application,
-                    ScanBlueToothAddressActivity::class.java
+                    RegistrationActivity::class.java
                 )
 
                 //     intent.putExtra(Constants.KEY_STAT_TRANS_BT_ADRS,sEditTextBtText)
