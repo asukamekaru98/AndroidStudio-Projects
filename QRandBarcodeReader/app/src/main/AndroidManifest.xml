@@ -58,7 +58,7 @@
             />
 
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".registration.RegistrationActivity"
             android:theme="@style/Theme.CodeReader.NoActionBar"
             />
     </application>
